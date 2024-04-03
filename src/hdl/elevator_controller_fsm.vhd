@@ -68,7 +68,9 @@
 --|
 --+----------------------------------------------------------------------------
 library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+    use IEEE.STD_LOGIC_1164.ALL;
+    use ieee.std_logic_1164.vhd;
+    use ieee.numeric_std.all;
 
 entity elevator_controller_fsm is
     Port ( i_clk     : in  STD_LOGIC;
@@ -96,32 +98,51 @@ begin
 
 	-- CONCURRENT STATEMENTS ------------------------------------------------------------------------------
 	-- Next State Logic
-    f_Q_next <= <state> when (<condition>) else -- going up
-                ...
-                ...
-                ... -- going down
-                ...
-                ... else
-                ...; -- default case
+    f_Q_next <= s_floor2 when (f_Q = s_floor1 and i_up_down = '1') else -- going up
+                s_floor3 when (f_Q = s_floor2 and i_up_down = '1') else
+                s_floor4 when (f_Q = s_floor3 and i_up_down = '1') else
+                s_floor4 when (f_Q = s_floor4 and i_up_down = '1') else
+                s_floor3 when (f_Q = s_floor4 and i_up_down = '0') else -- going down
+                s_floor2 when (f_Q = s_floor3 and i_up_down = '0') else
+                s_floor1 when (f_Q = s_floor2 and i_up_down = '0') else
+                s_floor1 when (f_Q = s_floor1 and i_up_down = '0') else
+                s_floor2;
+                
+    
+           -- f_Q when f_Q = s_floor2 and i_up_down = '1' else -- going up
+           --             f_Q when f_Q = s_floor3 and i_up_down = '1' else
+           --             f_Q when f_Q = s_floor4 and i_up_down = '1' else
+           --             f_Q when f_Q = s_floor4 and i_up_down = '0' else -- going down
+           --             f_Q when f_Q = s_floor3 and i_up_down = '0' else
+           --             f_Q when f_Q = s_floor2 and i_up_down = '0' else
+           --             f_Q when f_Q = s_floor1; -- default case
   
 	-- Output logic
     with f_Q select
-        o_floor <= <value> when s_floor1,
-                ...
-                ...
-                <value> when others; -- default is floor 2
+        o_floor <= "0001" when s_floor1,
+               "0010" when s_floor2,
+               "0011" when s_floor3,
+               "0100" when s_floor4,
+               "0010" when others; -- default is floor 2
 	
 	-------------------------------------------------------------------------------------------------------
 	
 	-- PROCESSES ------------------------------------------------------------------------------------------	
 	-- State memory ------------
-	register_proc : process (i_clk)
+	register_proc : process (i_clk, i_reset)
     begin
          -- synchronous reset
-        
+         if i_reset = '1' then
+            f_Q <= s_floor2; -- Reset state is floor 2
+        elsif (rising_edge(i_clk)) then
         -- if elevator is enabled, advance floors
+            if(i_stop = '0') then
+                f_Q <= f_Q_next;
         -- if not enabled, stay at current floor
-    
+            else
+                f_Q <= f_Q;
+            end if;
+        end if;
 	end process register_proc;	
 	
 	-------------------------------------------------------------------------------------------------------
