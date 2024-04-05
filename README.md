@@ -15,7 +15,9 @@ You can simply open `elevatorController.xpr` and Vivado will do the rest!
 ## GitHub Actions Testbench
 
 The workflow uses the [setup-ghdl-ci](https://github.com/ghdl/setup-ghdl-ci) GitHub action
-to run a *nightly* build of [GHDL](https://ghdl.github.io/ghdl/).
+to run a *nightly* build of [GHDL](https://ghdl.github.io/ghdl/).<img width="833" alt="ICE5ScreenShot" src="https://github.com/Jayde-Crowe/ece281-ice5/assets/141943850/65c5870e-6a39-40ee-a423-431d96342f8b">
+![Image (17)](https://github.com/Jayde-Crowe/ece281-ice5/assets/141943850/2d0e4829-4e73-4ded-bf60-9df9731a7ac0)
+
 
 The workflow uses GHDL to analyze, elaborate, and run the entity specified in the `.github/workflows/testbench.yml`.
 
@@ -27,3 +29,6 @@ env:
 If successful then GHDL will quietly exit with a `0` code.
 If any of the `assert` statements fail **with** `severity failure` then GHDL will cease the simulation and exit with non-zero code; this will also cause the workflow to fail.
 Assert statements of other severity levels, such as "error" w
+
+Documentation Statement: After I finish the test bench, I got errors on them - due to my next state logic not being correct. I created a diagram on my white board and reference someone from class cause I guess you can see
+other people's code...(?) anyways, I kept the one I had orginally (commented, of course). There were only small errors like the needing () around the and logic and making f_Q actually equal a floor. Also, I found out why on od the values was 2 - it represented the floor it was on or something.
