@@ -69,7 +69,7 @@
 --+----------------------------------------------------------------------------
 library IEEE;
     use IEEE.STD_LOGIC_1164.ALL;
-    use ieee.std_logic_1164.vhd;
+    --use ieee.std_logic_1164.vhd;
     use ieee.numeric_std.all;
 
 entity elevator_controller_fsm is
